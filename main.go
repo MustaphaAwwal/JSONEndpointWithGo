@@ -36,7 +36,7 @@ func New_task_details() *task_details {
 		Current_day:     time.Now().Weekday().String(),
 		Utc_time:        time.Now().UTC().Format("2006-01-02T15:04:05Z"),
 		Track:           "",
-		Github_file_url: "https://github.com/MustaphaAwwal/JSONEndpointWithGo/blob/main/main.go",
+		Github_file_url: "https://github.com/MustaphaAwwal/JSONEndpointWithGo/blob/master/main.go",
 		Github_repo_url: "https://github.com/MustaphaAwwal/JSONEndpointWithGo",
 		Status_code:     http.StatusOK,
 	}
