@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -31,21 +32,30 @@ func (t *task_details) ToJson(w io.Writer) error {   // Convert task_details to 
 
 func New_task_details() *task_details {
 	logger.Println("New instance of task details")
+
 	return &task_details{
 		Slack_name:      "",
-		Current_day:     time.Now().Weekday().String(),
-		Utc_time:        time.Now().UTC().Format("2006-01-02T15:04:05Z"),
+		Current_day:     "",
+		Utc_time:        "",
 		Track:           "",
 		Github_file_url: "https://github.com/MustaphaAwwal/JSONEndpointWithGo/blob/master/main.go",
 		Github_repo_url: "https://github.com/MustaphaAwwal/JSONEndpointWithGo",
 		Status_code:     http.StatusOK,
 	}
+	
 
 }
 
-func (t *task_details) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	logger.Println("serve task details API ")
 
+func (t *task_details) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	//serveHTTP task details API
+
+
+	currentTime := time.Now().UTC()
+	currentDate := time.Now().Weekday().String()
+
+    t.Utc_time = currentTime.Format("2006-01-02T15:04:05Z")	
+	t.Current_day = currentDate
 	t.Slack_name = url.QueryEscape( r.URL.Query().Get("slack_name"))
 	t.Track = url.QueryEscape( r.URL.Query().Get("track"))
 	err := t.ToJson(rw)
@@ -58,9 +68,10 @@ func (t *task_details) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-	logger.Println("Starting server on port 1001")
+	logger.Println("Starting server on port 80")
 	task_one := New_task_details()
-
+	fmt.Print(*task_one)
+	
 	sm := http.NewServeMux()
 	
 	sm.Handle("/api", task_one)
